@@ -1,0 +1,19 @@
+[package]
+authors = ["Abdulsemiu Atanda <semiu@live.com>"]
+name = "orchestra"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.94"
+
+[[bin]]
+name = "orchestra"
+path = "src/main.rs"
+
+[dependencies]
+aws-config = "1.10.1"
+aws-sdk-s3 = "1.141.0"
+clap = { version = "4.6.6", features = ["derive", "env"] }
+clap_derive = "4.6.4"
+dialoguer = "0.12.0"
+dotenvy = "0.15.7"
+tokio = { version = "1.53.1", features = ["full"] }
