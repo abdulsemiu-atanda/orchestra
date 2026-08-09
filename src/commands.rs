@@ -13,7 +13,8 @@ fn config_command() -> Command {
             .value_name("STRING")
             .action(ArgAction::Set)
             .help("Folder name for generated keys")
-            .default_value(".keys"),
+            .default_value(".keys")
+            .env("ORCHESTRA_KEYS_FOLDER"),
         )
         .arg(
           Arg::new("filenames")
