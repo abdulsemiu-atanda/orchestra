@@ -21,7 +21,7 @@ pub async fn run_config_command(matches: &ArgMatches) -> std::io::Result<()> {
         .with_prompt("Credentials Client ID")
         .interact_text()
         .expect("Failed to process client name input");
-      let filenames = vec!["publick_key.pem".to_owned(), "private_key.pem".to_owned()];
+      let filenames = vec!["public_key.pem".to_owned(), "private_key.pem".to_owned()];
       let bucket_name = dotenvy::var("AWS_S3_BUCKET_NAME").expect("AWS_S3_BUCKET_NAME must be set in .env");
       let config = aws_config::load_defaults(BehaviorVersion::latest()).await;
       let downloader = FileDownloader::new(&bucket_name, config, &client_id);
