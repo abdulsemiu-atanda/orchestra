@@ -22,4 +22,5 @@ dialoguer = "0.12.0"
 dotenvy = "0.15.7"
 env_logger = "0.11.11"
 log = "0.4.33"
+network = { git = "https://github.com/abdulsemiu-atanda/network.git", rev = "920f6744669bd18aa179ae5910d872d6f963e43a" }
 tokio = { version = "1.53.1", features = ["full"] }
