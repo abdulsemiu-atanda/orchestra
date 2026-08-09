@@ -1,7 +1,7 @@
 mod commands;
+mod errors;
 mod runners;
 mod services;
-mod errors;
 
 use commands::build_cli;
 use runners::run_config_command;

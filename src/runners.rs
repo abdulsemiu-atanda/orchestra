@@ -17,11 +17,15 @@ pub async fn run_config_command(matches: &ArgMatches) -> std::io::Result<()> {
         .map(|value| value.to_owned())
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from(".keys"));
+      let filenames = flags
+        .get_one::<String>("filenames")
+        .map(|value| value.to_owned())
+        .map(|names| names.split(',').map(|name| name.to_string()).collect::<Vec<String>>())
+        .unwrap_or_default();
       let client_id: String = Input::with_theme(&ColorfulTheme::default())
         .with_prompt("Credentials Client ID")
         .interact_text()
         .expect("Failed to process client name input");
-      let filenames = vec!["public_key.pem".to_owned(), "private_key.pem".to_owned()];
       let bucket_name = dotenvy::var("AWS_S3_BUCKET_NAME").expect("AWS_S3_BUCKET_NAME must be set in .env");
       let config = aws_config::load_defaults(BehaviorVersion::latest()).await;
       let downloader = FileDownloader::new(&bucket_name, config, &client_id);

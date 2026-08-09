@@ -14,6 +14,15 @@ fn config_command() -> Command {
             .action(ArgAction::Set)
             .help("Folder name for generated keys")
             .default_value(".keys"),
+        )
+        .arg(
+          Arg::new("filenames")
+            .short('n')
+            .long("filenames")
+            .value_name("STRING")
+            .action(ArgAction::Set)
+            .help("Comma separated names of files to be downloaded")
+            .default_value("public_key.pem,private_key.pem"),
         ),
     )
     .subcommand_required(true)
