@@ -9,6 +9,10 @@ rust-version = "1.94"
 name = "orchestra"
 path = "src/main.rs"
 
+[lib]
+name="orchestra"
+path="src/lib.rs"
+
 [dependencies]
 aws-config = "1.10.1"
 aws-sdk-s3 = "1.141.0"
