@@ -24,6 +24,7 @@ pub async fn run_config_command(matches: &ArgMatches) -> std::io::Result<()> {
         .unwrap_or_default();
       let client_id: String = Input::with_theme(&ColorfulTheme::default())
         .with_prompt("Credentials Client ID")
+        .with_initial_text(dotenvy::var("ORCHESTRA_CLIENT_ID").unwrap_or_default())
         .interact_text()
         .expect("Failed to process client name input");
       let bucket_name = dotenvy::var("AWS_S3_BUCKET_NAME").expect("AWS_S3_BUCKET_NAME must be set in .env");
