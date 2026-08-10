@@ -6,6 +6,25 @@ use std::path::PathBuf;
 
 use crate::services::file_downloader::FileDownloader;
 
+/// Prompting is the fallback rather than the first move: dialoguer renders on stderr and refuses to
+/// run without a terminal, so an unattended deploy has to be able to supply the id up front. The
+/// `.env` lookup backs up the flag's own `ORCHESTRA_CLIENT_ID` binding, which clap resolves from the
+/// process environment before dotenvy has read the file.
+fn client_id(flags: &ArgMatches) -> String {
+  let supplied = flags
+    .get_one::<String>("client-id")
+    .map(|value| value.to_owned())
+    .or_else(|| dotenvy::var("ORCHESTRA_CLIENT_ID").ok())
+    .filter(|value| !value.is_empty());
+
+  supplied.unwrap_or_else(|| {
+    Input::with_theme(&ColorfulTheme::default())
+      .with_prompt("Credentials Client ID")
+      .interact_text()
+      .expect("Failed to process client name input")
+  })
+}
+
 pub async fn run_config_command(matches: &ArgMatches) -> std::io::Result<()> {
   match matches
     .subcommand()
@@ -22,11 +41,7 @@ pub async fn run_config_command(matches: &ArgMatches) -> std::io::Result<()> {
         .map(|value| value.to_owned())
         .map(|names| names.split(',').map(|name| name.to_string()).collect::<Vec<String>>())
         .unwrap_or_default();
-      let client_id: String = Input::with_theme(&ColorfulTheme::default())
-        .with_prompt("Credentials Client ID")
-        .with_initial_text(dotenvy::var("ORCHESTRA_CLIENT_ID").unwrap_or_default())
-        .interact_text()
-        .expect("Failed to process client name input");
+      let client_id = client_id(flags);
       let bucket_name = dotenvy::var("AWS_S3_BUCKET_NAME").expect("AWS_S3_BUCKET_NAME must be set in .env");
       let config = aws_config::load_defaults(BehaviorVersion::latest()).await;
       let downloader = FileDownloader::new(&bucket_name, config, &client_id);

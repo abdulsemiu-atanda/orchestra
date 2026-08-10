@@ -17,6 +17,15 @@ fn config_command() -> Command {
             .env("ORCHESTRA_KEYS_FOLDER"),
         )
         .arg(
+          Arg::new("client-id")
+            .short('c')
+            .long("client-id")
+            .value_name("STRING")
+            .action(ArgAction::Set)
+            .help("Credentials client id the keys are stored under")
+            .env("ORCHESTRA_CLIENT_ID"),
+        )
+        .arg(
           Arg::new("filenames")
             .short('n')
             .long("filenames")
